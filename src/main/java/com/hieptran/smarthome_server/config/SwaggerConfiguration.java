@@ -12,11 +12,11 @@ import io.swagger.v3.oas.annotations.servers.Server;
 @OpenAPIDefinition(
         info = @Info(
                 contact = @Contact(
-                        name = "Smarthome Server",
+                        name = "HomePod Server",
                         email = "Hiep Tran",
                         url = "https://google.com"
                 ),
-                description = "OpenApi documentation for Lao Network project",
+                description = "OpenApi documentation for HomePod project",
                 title = "OpenAPI specification",
                 version = "1.0"
         ),
