@@ -5,7 +5,7 @@
 The Smart Home Server is a Spring Boot application designed to manage and control smart home devices. It provides RESTful APIs for interacting with home devices, managing user authentication, and handling MQTT communication for real-time device control.
 
 ## Features
-
+![Image](https://github.com/user-attachments/assets/ec90f1af-0cac-4ccd-8092-cff01813c050)
 - User authentication and authorization using JWT tokens
 - Home and device management
 - Real-time device control via MQTT
