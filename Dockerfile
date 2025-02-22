@@ -17,6 +17,8 @@ USER smarthome
 
 EXPOSE 8080
 
-ENV JAVA_OPTIONS="-Xmx2048m -Xms256m"
+#ENV JAVA_OPTIONS="-Xmx2048m -Xms256m"
+ENV JAVA_OPTIONS="-Xmx2048m -Xms2048m -XX:+UseZGC -Xlog:gc*"
 
-ENTRYPOINT java -jar /run/smarthome-server-0.0.1-SNAPSHOT.jar
+#ENTRYPOINT java -jar /run/smarthome-server-0.0.1-SNAPSHOT.jar
+ENTRYPOINT java ${JAVA_OPTIONS} -jar /run/smarthome-server-*.jar
