@@ -1,24 +1,22 @@
 FROM maven:3.9.8-eclipse-temurin-21 as build
-WORKDIR ./app
+WORKDIR /app
 COPY . .
-RUN mvn clean package -DskipTests=true
+RUN mvn clean package -T 1C -DskipTests
 
-FROM alpine:3.19
+FROM eclipse-temurin:21-jdk-jammy
+RUN useradd -ms /bin/bash smarthome
+WORKDIR /app
 
-RUN adduser -D smarthome
-
-RUN apk add openjdk21
-
-WORKDIR /run
-COPY --from=build /app/target/smarthome-server-0.0.1-SNAPSHOT.jar /run/smarthome-server-0.0.1-SNAPSHOT.jar
-RUN chown -R smarthome:smarthome /run
+COPY --from=build --chown=smarthome /app/target/*.jar /app/app.jar
 
 USER smarthome
 
 EXPOSE 8080
 
-#ENV JAVA_OPTIONS="-Xmx2048m -Xms256m"
-ENV JAVA_OPTIONS="-Xmx2048m -Xms2048m -XX:+UseZGC -Xlog:gc*"
+# ZGC config (cho latency thấp)
+#ENV JAVA_OPTS="-XX:+UseZGC -Xms2g -Xmx2g -XX:MaxGCPauseMillis=200 -XX:+ZUncommit -Xlog:gc*,safepoint:gc.log"
 
-#ENTRYPOINT java -jar /run/smarthome-server-0.0.1-SNAPSHOT.jar
-ENTRYPOINT java ${JAVA_OPTIONS} -jar /run/smarthome-server-*.jar
+# Hoặc Shenandoah config (cho throughput cao)
+ ENV JAVA_OPTS="-XX:+UseShenandoahGC -Xms4g -Xmx4g -XX:ShenandoahGCMode=iu -Xlog:gc*,ergo*=trace"
+
+ENTRYPOINT ["java", "-jar", "/app/app.jar"]
